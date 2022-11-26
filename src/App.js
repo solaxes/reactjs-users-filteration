@@ -1,62 +1,52 @@
 import "./App.css";
-import React, { Component } from "react";
+
+import { useState, useEffect } from "react";
+
 import CardList from "./components/card-list/card-list.component";
 import SearchBox from "./components/search-box/search-box.component";
 
-class App extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      users: [],
-      searchField: "",
-    };
-  }
-
+const App = () => {
+  console.log("render");
   /**
-   * fetch users and populate in users array when component is mounted
+   * searchField is set to blank string, and setSearchField is function which is going to update
+   * value of searchField, so whatever value will be passed to the setSearchField will be latest
+   * value of searchField
    */
-  componentDidMount() {
+  const [searchField, setSearchField] = useState("");
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFileteredUser] = useState(users);
+
+  useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
-      .then((fetchedUsers) =>
-        this.setState(() => {
-          return { users: fetchedUsers };
-        })
-      );
-  }
+      .then((users) => setUsers(users));
+  }, []);
 
-  /**
-   * Filters users based on the search box text, if empty all users will be displayed
-   */
-  onSearchChange = (event) => {
-    const searchField = event.target.value.toLocaleLowerCase();
+  const onSearchChange = (event) => {
+    const searchFieldString = event.target.value.toLocaleLowerCase();
 
-    this.setState(() => {
-      return { searchField };
-    });
+    setSearchField(searchFieldString);
   };
 
-  render() {
-    const { users, searchField } = this.state;
-    const { onSearchChange } = this;
-
-    const filteredUsers = users.filter((user) => {
+  useEffect(() => {
+    const newfilteredUsers = users.filter((user) => {
       return user.name.toLocaleLowerCase().includes(searchField);
     });
+    setFileteredUser(newfilteredUsers);
+  }, [users, searchField]);
 
-    return (
-      <div className="App">
-        <SearchBox
-          className="user-search-box"
-          onChangeHandler={onSearchChange}
-          placeholder="Search users"
-        />
+  return (
+    <div className="App">
+      <h1 className="app-title">User Filteration with Functional Components</h1>
+      <SearchBox
+        className="user-search-box"
+        onChangeHandler={onSearchChange}
+        placeholder="search users"
+      />
 
-        <CardList users={filteredUsers} />
-      </div>
-    );
-  }
-}
+      <CardList users={filteredUsers} />
+    </div>
+  );
+};
 
 export default App;
