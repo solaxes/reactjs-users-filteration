@@ -13,7 +13,9 @@ class App extends Component {
     };
   }
 
-  // fetch users and populate in users array when component is mounted
+  /**
+   * fetch users and populate in users array when component is mounted
+   */
   componentDidMount() {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
@@ -24,6 +26,9 @@ class App extends Component {
       );
   }
 
+  /**
+   * Filters users based on the search box text, if empty all users will be displayed
+   */
   onSearchChange = (event) => {
     const searchField = event.target.value.toLocaleLowerCase();
 

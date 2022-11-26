@@ -1,5 +1,9 @@
 import { Component } from "react";
 import "./search-box.styles.css";
+
+/**
+ * Display search box for the users to filter records
+ */
 class SearchBox extends Component {
   render() {
     return (
