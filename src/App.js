@@ -8,18 +8,18 @@ class App extends Component {
     super();
 
     this.state = {
-      monsters: [],
+      users: [],
       searchField: "",
     };
   }
 
-  // fetch users and populate in monsters array when component is mounted
+  // fetch users and populate in users array when component is mounted
   componentDidMount() {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
-      .then((users) =>
+      .then((fetchedUsers) =>
         this.setState(() => {
-          return { monsters: users };
+          return { users: fetchedUsers };
         })
       );
   }
@@ -33,22 +33,22 @@ class App extends Component {
   };
 
   render() {
-    const { monsters, searchField } = this.state;
+    const { users, searchField } = this.state;
     const { onSearchChange } = this;
 
-    const filteredMonsters = monsters.filter((monster) => {
-      return monster.name.toLocaleLowerCase().includes(searchField);
+    const filteredUsers = users.filter((user) => {
+      return user.name.toLocaleLowerCase().includes(searchField);
     });
 
     return (
       <div className="App">
         <SearchBox
-          className="monster-search-box"
+          className="user-search-box"
           onChangeHandler={onSearchChange}
-          placeholder="Search monsters"
+          placeholder="Search users"
         />
 
-        <CardList monsters={filteredMonsters} />
+        <CardList users={filteredUsers} />
       </div>
     );
   }
